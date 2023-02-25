@@ -26,8 +26,8 @@ public:
     int move(std::string targetPos, Map *ptrMap); // return 1 jika berhasil move, otherwise 0
     void shoot(Kapal& musuh, Map *ptrMap);
     void showHealthStats();
-    std::vector<int> getValidPos(Map *ptrMap);
     std::vector<int> translationToCoordinat(std::string& targetPos);
+    std::vector<int> translationToStrCoor(std::string& targetPos);
 };
 
 class KapalMusuh : public Kapal

@@ -21,7 +21,8 @@ int main()
     std::cout << "Perintah Move: ";
     std::cin >> move;
 
-    myShip.translationToCoordinat(move);
+    myShip.move(move, &peta);
+    peta.showMap(&myShip);
 
     return 0;
 }
