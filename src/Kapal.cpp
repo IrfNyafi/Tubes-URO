@@ -1,5 +1,6 @@
 #include "Kapal.h"
 #include "Map.h"
+#include <cstdlib>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -32,6 +33,63 @@ bool KapalMusuh::nameExist(std::string val, std::vector<KapalMusuh> vect)
     }
     return false;
 }
+
+// std::vector<int> Kapal::translationAbsToRel(std::string targetPos) // Accepted format move e.g. "A13"
+std::vector<int> Kapal::translationToCoordinat(std::string& targetPos)
+{
+    const char *hurufScale = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    char letter = targetPos[0];
+    std::string number = targetPos.substr(1);
+
+    std::vector<int> tempResult(2, 0);
+    tempResult[1] = stoi(number) - 1; // for xRel
+
+    int indexHurufScale = -1;
+    for (int i = 0; i < 26; ++i)
+    {
+        if (letter == hurufScale[i])
+        {
+            indexHurufScale = i;
+        }
+    }
+
+    if (indexHurufScale != -1)
+    {
+        tempResult[0] = indexHurufScale;
+    }
+    std::cout << tempResult[0] << ", " << tempResult[1] << '\n';
+    return tempResult;
+}
+
+// int Kapal::move(std::string targetPos, Map *ptrMap) // return 1 jika berhasil move, otherwise 0
+// {
+//     std::vector<std::vector<std::string>> map = ptrMap->getMap();
+//     std::vector<int> relativeMove = translationAbsToRel(targetPos); // Index 0 for Y coordinate and 1 for X coordinat
+
+//     std::cout << "\n\n====== check tranlation value ========\n";
+//     std::cout << "yrel = " << relativeMove[0] << '\n';
+//     std::cout << "xrel = " << relativeMove[1] << '\n';
+//     std::cout << "\nOrigin x = " << xPos << "\nOrigin y = " << yPos << '\n';
+//     std::cout << "========================================\n\n";
+
+//     if (map[yPos + relativeMove[0]][xPos + relativeMove[1]] == ptrMap->getRockChar())
+//     {
+//         std::cerr << "\nYou hit a rock!\n";
+//         return 0;
+//     }
+//     else if (std::abs(relativeMove[0]) + std::abs(relativeMove[1]) > maxStepMove)
+//     {
+//         std::cerr << "\nToo many move. The number of maximum move step is " << maxStepMove << '\n';
+//         return 0;
+//     }
+
+//     // map[yPos + 1][xPos + 1] = ptrMap->getEmptyCellStr();
+//     map[yPos + relativeMove[0]][xPos + relativeMove[1]] = Nama;
+//     map[yPos][xPos] = "!!";
+//     ptrMap->setMap(map);
+//     return 1;
+// }
 
 KapalMusuh::KapalMusuh(Map *ptrMap) : Kapal()
 {

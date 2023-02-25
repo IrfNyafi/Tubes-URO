@@ -15,7 +15,6 @@ int Map::generateRand(int a, int b)
 
 Map::Map()
 {
-    std::string rocksChar = " *";
     for (int i = 0; i < 17; ++i)
     {
         int a, b;
@@ -51,7 +50,7 @@ void Map::showMap(Kapal *myShip)
     }
     std::cout << '\n';
 
-    std::cout << " ----";
+    std::cout << " -";
     for (int i_hor = 1; i_hor <= 1 * rowMap; ++i_hor)
     {
         std::cout << "----";
@@ -62,7 +61,7 @@ void Map::showMap(Kapal *myShip)
     {
         if (i % 2 == 0)
         {
-            std::cout << " ----";
+            std::cout << " -";
             for (int i_hor = 1; i_hor <= 1 * rowMap; ++i_hor)
             {
                 std::cout << "----";
@@ -75,7 +74,7 @@ void Map::showMap(Kapal *myShip)
             std::cout << hurufScale[temp_i - 1] << '|';
             for (int k = 1; k <= colMap; ++k)
             {
-                if (myShip->getYPos() == temp_i && myShip->getXPos() == k)
+                if (myShip->getYPos() + 1 == temp_i && myShip->getXPos() + 1 == k)
                 {
                     std::cout << std::setw(2) << myShip->getNama() << '|';
                 }

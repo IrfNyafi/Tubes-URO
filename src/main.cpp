@@ -1,5 +1,6 @@
 #include "Map.h"
 #include <iostream>
+#include <string>
 #include <vector>
 
 int main()
@@ -13,6 +14,14 @@ int main()
     peta.setVectMusuh(tempInitialize);
 
     peta.showMap(&myShip);
+
+    std::cout << "\n\nCheck Move\n\n";
+
+    std::string move;
+    std::cout << "Perintah Move: ";
+    std::cin >> move;
+
+    myShip.translationToCoordinat(move);
 
     return 0;
 }

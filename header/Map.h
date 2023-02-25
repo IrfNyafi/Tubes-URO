@@ -6,12 +6,13 @@
 class Map
 {
 private:
-    // char arrMap[rowMap][colMap];
-
-    std::vector<std::vector<std::string>> arrMap = {rowMap, {colMap, std::string{"  "}}};
+    std::string emptyCell = "  ";
+    std::vector<std::vector<std::string>> arrMap = {rowMap, {colMap, std::string{emptyCell}}};
+    // std::vector<std::vector<std::string>> arrMap = {rowMap, {colMap, std::string{"  "}}};
     std::vector<KapalMusuh> vectMusuh;
     std::vector<std::vector<int>> rocks;
     int jumlahMaxMusuh = 3;
+    std::string rocksChar = " *";
 
 public:
     Map();
@@ -20,6 +21,8 @@ public:
     // void showMap(Kapal *myShip, std::vector<KapalMusuh>& enemyShip); // Also displaying our ship, enemy ship, and rocks
 
     int getMaxJumlahMusuh() { return jumlahMaxMusuh; }
+    std::string getRockChar() { return rocksChar; }
+    std::string getEmptyCellStr() { return emptyCell; }
 
     std::vector<std::vector<std::string>> const& getMap() const { return arrMap; }
     void setMap(std::vector<std::vector<std::string>> x) { arrMap = std::move(x); }

@@ -2,8 +2,8 @@
 #include <string>
 #include <vector>
 
-static const int rowMap = 15;
-static const int colMap = 21;
+static const int rowMap = 15; // Tidak boleh lebih dari 26
+static const int colMap = 20;
 
 class Map;
 
@@ -11,8 +11,9 @@ class Kapal
 {
 protected:
     std::string Nama = "##";
-    int xPos, yPos, healthStatus;
+    int xPos, yPos, healthStatus; // Koordinat sudah mengikuti konvensi map yang sudah dibuat
     Map *copyMap;
+    int maxStepMove = 2;
 
 public:
     Kapal() = default;
@@ -22,10 +23,11 @@ public:
     int const& getYPos() const { return yPos; }
     std::string const& getNama() const { return Nama; }
 
-    void move(int& xRel, int& yRel, Map& statusLoc);
-    void shoot(Kapal& musuh, Map& statusLoc);
+    int move(std::string targetPos, Map *ptrMap); // return 1 jika berhasil move, otherwise 0
+    void shoot(Kapal& musuh, Map *ptrMap);
     void showHealthStats();
     std::vector<int> getValidPos(Map *ptrMap);
+    std::vector<int> translationToCoordinat(std::string& targetPos);
 };
 
 class KapalMusuh : public Kapal
@@ -35,7 +37,8 @@ public:
     KapalMusuh(Map *ptrMap);
     KapalMusuh(std::string name, Map *ptrMap);
     bool nameExist(std::string val, std::vector<KapalMusuh> vect);
-    void die(Map& statusLoc);
-    void distanceToShip(Kapal& myShip, Map& statusLoc);
-    void moveCloser(Map& statusLoc);
+    void die(Map *ptrMap);
+    void distanceToShip(Kapal& myShip, Map *ptrMap);
+    void moveCloser(Map *ptrMap);
+    std::vector<std::string> koleksiMove(KapalMusuh *musuh, Map *ptrMap);
 };
