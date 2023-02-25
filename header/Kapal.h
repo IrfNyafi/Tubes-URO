@@ -28,6 +28,7 @@ public:
     void showHealthStats();
     std::vector<int> getValidPos(Map *ptrMap);
     std::vector<int> translationToCoordinat(std::string& targetPos);
+    std::string translationToStr (int a, int b);
 };
 
 class KapalMusuh : public Kapal

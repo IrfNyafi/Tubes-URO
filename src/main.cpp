@@ -22,6 +22,6 @@ int main()
     std::cin >> move;
 
     myShip.translationToCoordinat(move);
-
+    std::cout << myShip.translationToStr(2,3);
     return 0;
 }

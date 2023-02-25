@@ -145,3 +145,30 @@ KapalMusuh::KapalMusuh(std::string name, Map *ptrMap) : Kapal()
     map[row][col] = Nama;
     ptrMap->setMap(map);
 }
+
+std::string Kapal::translationToStr(int a, int b){
+    std::string result;
+    const char *hurufScale = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    result = hurufScale[a] + std::to_string(b + 1);
+    
+    return result;
+}
+
+std::vector<std::string> KapalMusuh::koleksiMove(KapalMusuh *musuh, Map *ptrMap){
+    std::vector<std::vector<std::string>> map = ptrMap->getMap();
+    std::vector<std::string> temporary;
+
+    for (int i = -1; i <= 1; ++i)
+    {
+        for (int j = -1; j <= 1; ++j)
+        {
+            if (map[yPos + i][xPos + j] == ptrMap->getEmptyCellStr())
+            { 
+                temporary.push_back(translationToStr(i, j));
+                if ((yPos - 1 < 0) || (xPos - 1 < 0))
+                {
+                    break;
+                }
+            }
+        }
+    }
