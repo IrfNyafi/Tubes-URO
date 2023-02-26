@@ -62,6 +62,15 @@ std::vector<int> Kapal::translationToCoordinat(std::string& targetPos)
     return tempResult;
 }
 
+std::string Kapal::translationToStrCoor(int row, int col)
+{
+    std::string tempResult;
+    const char *hurufScale = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    tempResult = hurufScale[row] + std::to_string(col + 1);
+
+    return tempResult;
+}
+
 int Kapal::move(std::string targetPos, Map *ptrMap) // return 1 jika berhasil move, otherwise 0
 {
     std::vector<std::vector<std::string>> map = ptrMap->getMap();
@@ -121,6 +130,9 @@ KapalMusuh::KapalMusuh(Map *ptrMap) : Kapal()
 
     } while (map[row][col] != "  ");
 
+    yPos = row;
+    xPos = col;
+
     map[row][col] = Nama;
     ptrMap->setMap(map);
 }
@@ -140,11 +152,52 @@ KapalMusuh::KapalMusuh(std::string name, Map *ptrMap) : Kapal()
 
     } while (map[row][col] != "  ");
 
+    yPos = row;
+    xPos = col;
+
     map[row][col] = Nama;
     ptrMap->setMap(map);
 }
 
-std::vector<std::string> KapalMusuh::koleksiMove(KapalMusuh *musuh, Map *ptrMap)
+std::vector<std::string> KapalMusuh::koleksiMove(Map *ptrMap)
 {
     std::vector<std::string> tempResult;
+    std::vector<std::vector<std::string>> map = ptrMap->getMap();
+
+    for (int i = -1; i <= 1; ++i)
+    {
+        for (int k = -1; k <= 1; ++k)
+        {
+            if ((i + yPos >= 0 && i + yPos < rowMap) && (k + xPos >= 0 && k + xPos < colMap))
+            {
+                if (map[i + yPos][k + xPos] == ptrMap->getEmptyCellStr())
+                {
+                    tempResult.push_back(translationToStrCoor(i + yPos, k + xPos));
+                }
+            }
+        }
+    }
+
+    return tempResult;
+}
+int KapalMusuh::distanceToShip(Kapal *Ship, Map *ptrMap)
+{
+}
+
+void KapalMusuh::moveCloser(Map *ptrMap)
+{
+    std::vector<KapalMusuh> musuh2 = ptrMap->getVectMusuh();
+    std::vector<std::string> possibleMove;
+
+    for (KapalMusuh musuh : musuh2)
+    {
+        possibleMove = musuh.koleksiMove(ptrMap);
+        std::cout << "musuh: " << musuh.getNama() << '\n';
+        for (std::string posLangkah : possibleMove)
+        {
+            std::cout << posLangkah << ' ';
+        }
+        std::cout << '\n';
+    }
+    std::cout << '\n';
 }

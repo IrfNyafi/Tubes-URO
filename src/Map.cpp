@@ -31,16 +31,7 @@ Map::Map()
 
 void Map::showMap(Kapal *myShip)
 {
-
     const char *hurufScale = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-    // if (vectMusuh.size() > 0)
-    // {
-    //     for (int i = 0; i < (int)vectMusuh.size(); ++i)
-    //     {
-    //         arrMap[vectMusuh[i].getYPos()][vectMusuh[i].getXPos()] = vectMusuh[i].getNama();
-    //     }
-    // }
 
     std::cout << std::right;
     std::cout << " |";
@@ -87,21 +78,12 @@ void Map::showMap(Kapal *myShip)
         }
     }
 
-    // for (int i = 1; i <= rowMap; ++i)
-    // {
-    //     std::cout << hurufScale[i - 1] << '|';
-    //     for (int k = 1; k <= colMap; ++k)
-    //     {
-    //         if (myShip->getYPos() == i && myShip->getXPos() == k)
-    //         {
-    //             std::cout << std::setw(2) << myShip->getNama() << '|';
-    //         }
-    //         else
-    //         {
-    //             std::cout << std::setw(2) << arrMap[i - 1][k - 1] << '|';
-    //         }
-    //     }
-    //     std::cout << '\n';
-    // }
+    std::cout << " |";
+    for (int i = 1; i < colMap + 1; ++i)
+    {
+        std::cout << std::setw(2) << i << '|';
+    }
+    std::cout << '\n';
+
     std::cout << '\n';
 }

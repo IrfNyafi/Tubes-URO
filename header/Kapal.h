@@ -27,7 +27,7 @@ public:
     void shoot(Kapal& musuh, Map *ptrMap);
     void showHealthStats();
     std::vector<int> translationToCoordinat(std::string& targetPos);
-    std::vector<int> translationToStrCoor(std::string& targetPos);
+    std::string translationToStrCoor(int row, int col);
 };
 
 class KapalMusuh : public Kapal
@@ -38,7 +38,7 @@ public:
     KapalMusuh(std::string name, Map *ptrMap);
     bool nameExist(std::string val, std::vector<KapalMusuh> vect);
     void die(Map *ptrMap);
-    void distanceToShip(Kapal& myShip, Map *ptrMap);
+    int distanceToShip(Kapal *Ship, Map *ptrMap);
     void moveCloser(Map *ptrMap);
-    std::vector<std::string> koleksiMove(KapalMusuh *musuh, Map *ptrMap);
+    std::vector<std::string> koleksiMove(Map *ptrMap);
 };
