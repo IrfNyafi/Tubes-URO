@@ -29,6 +29,11 @@ public:
 
     std::vector<KapalMusuh> const& getVectMusuh() const { return vectMusuh; }
     void setVectMusuh(std::vector<KapalMusuh> y) { vectMusuh = std::move(y); }
+    void setVectMusuhAt(int x, int y, int index)
+    {
+        vectMusuh[index].setXPos(x);
+        vectMusuh[index].setYPos(y);
+    }
 
     std::vector<std::vector<int>> const& getRocks() const { return rocks; };
     // source : https://stackoverflow.com/questions/21227060/setter-and-getter-for-vector-and-list-in-c

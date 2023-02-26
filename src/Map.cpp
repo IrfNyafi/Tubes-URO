@@ -44,7 +44,7 @@ void Map::showMap(Kapal *myShip)
     std::cout << " -";
     for (int i_hor = 1; i_hor <= 1 * rowMap; ++i_hor)
     {
-        std::cout << "----";
+        std::cout << "------";
     }
     std::cout << '\n';
 
@@ -55,7 +55,7 @@ void Map::showMap(Kapal *myShip)
             std::cout << " -";
             for (int i_hor = 1; i_hor <= 1 * rowMap; ++i_hor)
             {
-                std::cout << "----";
+                std::cout << "------";
             }
             std::cout << '\n';
         }
@@ -65,14 +65,7 @@ void Map::showMap(Kapal *myShip)
             std::cout << hurufScale[temp_i - 1] << '|';
             for (int k = 1; k <= colMap; ++k)
             {
-                if (myShip->getYPos() + 1 == temp_i && myShip->getXPos() + 1 == k)
-                {
-                    std::cout << std::setw(2) << myShip->getNama() << '|';
-                }
-                else
-                {
-                    std::cout << std::setw(2) << arrMap[temp_i - 1][k - 1] << '|';
-                }
+                std::cout << std::setw(2) << arrMap[temp_i - 1][k - 1] << '|';
             }
             std::cout << '\n';
         }

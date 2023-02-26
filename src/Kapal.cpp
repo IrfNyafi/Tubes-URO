@@ -11,6 +11,9 @@ Kapal::Kapal(Map *ptrMap)
     yPos = (rowMap - 1) / 2;
     healthStatus = 10;
     copyMap = ptrMap;
+    std::vector<std::vector<std::string>> map = ptrMap->getMap();
+    map[yPos][xPos] = Nama;
+    ptrMap->setMap(map);
 }
 
 void Kapal::showHealthStats()
@@ -43,7 +46,7 @@ std::vector<int> Kapal::translationToCoordinat(std::string& targetPos)
     std::string number = targetPos.substr(1);
 
     std::vector<int> tempResult(2, 0);
-    tempResult[1] = stoi(number) - 1; // for xRel
+    tempResult[1] = stoi(number) - 1;
 
     int indexHurufScale = -1;
     for (int i = 0; i < 26; ++i)
@@ -59,7 +62,7 @@ std::vector<int> Kapal::translationToCoordinat(std::string& targetPos)
         tempResult[0] = indexHurufScale;
     }
 
-    return tempResult;
+    return tempResult; // index 0 for yCoor and 1 for xCoor
 }
 
 std::string Kapal::translationToStrCoor(int row, int col)
@@ -80,6 +83,7 @@ int Kapal::move(std::string targetPos, Map *ptrMap) // return 1 jika berhasil mo
 
     if (map[yTarget][xTarget] == ptrMap->getRockChar())
     {
+        std::cout << Nama << '\n';
         std::cerr << "\nYou hit a rock!\n";
         return 0;
     }
@@ -91,9 +95,10 @@ int Kapal::move(std::string targetPos, Map *ptrMap) // return 1 jika berhasil mo
     }
 
     map[yPos][xPos] = ptrMap->getEmptyCellStr();
-    yPos = yTarget;
-    xPos = xTarget;
+    setYPos(yTarget);
+    setXPos(xTarget);
 
+    map[yPos][xPos] = Nama;
     ptrMap->setMap(map);
     return 1;
 }
@@ -170,7 +175,7 @@ std::vector<std::string> KapalMusuh::koleksiMove(Map *ptrMap)
         {
             if ((i + yPos >= 0 && i + yPos < rowMap) && (k + xPos >= 0 && k + xPos < colMap))
             {
-                if (map[i + yPos][k + xPos] == ptrMap->getEmptyCellStr())
+                if (map[i + yPos][k + xPos] == ptrMap->getEmptyCellStr() || map[i + yPos][k + xPos] == "##")
                 {
                     tempResult.push_back(translationToStrCoor(i + yPos, k + xPos));
                 }
@@ -180,24 +185,81 @@ std::vector<std::string> KapalMusuh::koleksiMove(Map *ptrMap)
 
     return tempResult;
 }
-int KapalMusuh::distanceToShip(Kapal *Ship, Map *ptrMap)
+int KapalMusuh::distanceToShip(int& xTar, int& yTar, int& xShip, int& yShip)
 {
+    return std::abs(xTar - xShip) + std::abs(yTar - yShip);
 }
 
-void KapalMusuh::moveCloser(Map *ptrMap)
+void KapalMusuh::moveCloser(Kapal *myShip, Map *ptrMap)
 {
-    std::vector<KapalMusuh> musuh2 = ptrMap->getVectMusuh();
-    std::vector<std::string> possibleMove;
+    std::vector<std::vector<std::string>> map = ptrMap->getMap();
+    std::vector<std::string> possibleMove = koleksiMove(ptrMap);
 
-    for (KapalMusuh musuh : musuh2)
+    int yShip = myShip->getYPos();
+    int xShip = myShip->getXPos();
+
+    int recordStep = 999999;
+    std::string targetCoor;
+    std::vector<int> coor;
+    for (std::string posLangkah : possibleMove)
     {
-        possibleMove = musuh.koleksiMove(ptrMap);
-        std::cout << "musuh: " << musuh.getNama() << '\n';
-        for (std::string posLangkah : possibleMove)
+        coor = translationToCoordinat(posLangkah);
+        if (map[coor[0]][coor[1]] == myShip->getNama())
         {
-            std::cout << posLangkah << ' ';
+            // shoot
+            std::cout << getNama() << " Menembak Anda\n";
+            std::cout << "Tekan enter untuk melanjutkan";
+            std::cin.ignore();
+            std::cin.get();
+            myShip->reduceHealt();
+            continue;
         }
-        std::cout << '\n';
+        else
+        {
+            if (recordStep > distanceToShip(coor[1], coor[0], xShip, yShip))
+            {
+                recordStep = distanceToShip(coor[1], coor[0], xShip, yShip);
+                targetCoor = posLangkah;
+            }
+        }
     }
-    std::cout << '\n';
+    move(targetCoor, ptrMap);
+
+    std::vector<KapalMusuh> arrVectMusuh = ptrMap->getVectMusuh();
+    for (int i = 0; i < (int)arrVectMusuh.size(); ++i)
+    {
+        if (arrVectMusuh[i].getNama() == Nama)
+        {
+            ptrMap->setVectMusuhAt(xPos, yPos, i);
+        }
+    }
+}
+void Kapal::shoot(std::string coor, Map *ptrMap)
+{
+    int yCor = translationToCoordinat(coor)[0];
+    int xCor = translationToCoordinat(coor)[1];
+    if (std::abs(yCor - yPos) <= 1 && std::abs(xCor - xPos) <= 1)
+    {
+        std::vector<KapalMusuh> arrVectMusuh = ptrMap->getVectMusuh();
+        for (int i = 0; i < (int)arrVectMusuh.size(); ++i)
+        {
+            if (arrVectMusuh[i].getXPos() == xCor && arrVectMusuh[i].getYPos() == yCor)
+            {
+                arrVectMusuh[i].reduceHealt();
+                ptrMap->setVectMusuh(arrVectMusuh);
+            }
+        }
+
+        // for (KapalMusuh musuh : ptrMap->getVectMusuh())
+        // {
+        //     if (musuh.getXPos() == xCor && musuh.getYPos() == yCor)
+        //     {
+        //         std::cout << "Gak kesini bang\n";
+        //         musuh.reduceHealt();
+        //         std::cin.ignore();
+        //         std::cin.get();
+        //         break;
+        //     }
+        // }
+    }
 }
